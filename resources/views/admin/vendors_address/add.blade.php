@@ -1,0 +1,148 @@
+@extends('admin.layout')
+@section('content')
+<?php
+  $uri_path = $_SERVER['REQUEST_URI']; 
+ $uri_parts = explode('/', $uri_path);
+ $request_url = end($uri_parts);
+
+ ?>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1> {{ trans('Location') }} <small>{{ trans('Add Current Location') }}...</small> </h1>
+            <ol class="breadcrumb">
+                <li><a href="{{ URL::to('admin/dashboard/this_month') }}"><i class="fa fa-dashboard"></i> {{ trans('labels.breadcrumb_dashboard') }}</a></li>
+                <li><a href="{{ URL::to('admin/languages/display')}}"><i class="fa fa-language"></i>{{ trans('labels.languages') }}</a></li>
+                <li class="active">Add Location</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Info boxes -->
+
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="box">
+                      <div class="box-header">
+                          <h3 class="box-title">{{ trans('Add Location') }}</h3>
+                      </div>
+
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    @if (count($errors) > 0)
+                                        @if($errors->any())
+                                            <div class="alert alert-success alert-dismissible" role="alert">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                {{$errors->first()}}
+                                            </div>
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="box box-info">
+                                        <!-- form start -->
+                                        <div class="box-body">
+
+                                            {!! Form::open(array('url' =>'admin/languages/add_vendors_address', 'name'=>'deletelanguages', 'id'=>'deletelanguages', 'method'=>'post', 'class' => 'form-horizontal', 'enctype'=>'multipart/form-data')) !!}
+                                            @csrf
+
+                                            <input type="hidden" name="user_id" value="{{$request_url}}">
+                                            <div class="form-group">
+                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('Country Name') }}</label>
+                                                <div class="col-sm-10 col-md-4">
+                                                    <select name="country_id" class="form-control" required>
+                                                         <option value="">--SELECT Country--</option>
+                                                          @foreach ($countrylist as $key=>$countrylist)
+                                                         <option value="{{ $countrylist->id }}">{{ $countrylist->name }}</option>
+                                                        @endforeach
+                                                     </select>
+                                                    <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">{{ trans('labels.exampleLanguageName') }}</span>
+                                                    <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('State Name') }}</label>
+                                                <div class="col-sm-10 col-md-4">
+                                                    <select name="state_id" class="form-control state" required>
+                                                     <option value="">--SELECT State--</option>
+                                                        @foreach ($statelist as $key=>$statelist)
+                                                         <option value="{{ $statelist->id }}">{{ $statelist->name }}</option>
+                                                        @endforeach
+                                                     </select>
+                                                    <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">{{ trans('labels.exampleLanguageName') }}</span>
+                                                    <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('City Name') }}</label>
+                                                <div class="col-sm-10 col-md-4">
+                                                    <select name="city_id" class="form-control city" required>
+                                                     <option value="">--Select City--</option>
+                                                     </select>
+                                                    <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">{{ trans('labels.exampleLanguageName') }}</span>
+                                                    <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
+                                                </div>
+                                            </div>
+
+                                           <div class="form-group">
+                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('Address Name') }}</label>
+                                                <div class="col-sm-10 col-md-4">
+                                                    <select name="location_name" class="form-control address" required>
+                                                     <option value="">--Select Address--</option>
+                                                     </select>
+                                                    <span class="help-block" style="font-weight: normal;font-size: 11px;margin-bottom: 0;">{{ trans('labels.exampleLanguageName') }}</span>
+                                                    <span class="help-block hidden">{{ trans('labels.textRequiredFieldMessage') }}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('Shipping Charges') }}</label>
+                                                <div class="col-sm-10 col-md-4">
+                                                    {!! Form::number('shipping_fees',  null, array('class'=>'form-control', 'id'=>'shipping_fees'))!!}
+                                                </div>
+                                            </div>
+                                             <div class="form-group">
+                                                <label for="name" class="col-sm-2 col-md-3 control-label">{{ trans('Minimum Order Value') }}</label>
+                                                <div class="col-sm-10 col-md-4">
+                                                    {!! Form::number('min_order',  null, array('class'=>'form-control', 'id'=>'min_order'))!!}
+                                                   
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('labels.Close') }}</button>
+                                                <button type="submit" class="btn btn-primary" id="deletelanguages">{{ trans('Save') }}</button>
+                                            </div>
+                                            <!-- /.box-footer -->
+                                            {!! Form::close() !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <!-- Main row -->
+
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+@endsection
